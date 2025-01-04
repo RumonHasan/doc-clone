@@ -1,6 +1,17 @@
 'use client';
+import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { LucideIcon, Undo2Icon } from 'lucide-react';
+import { useEditorStore } from '@/store/use-editor-store';
+import {
+  BoldIcon,
+  ItalicIcon,
+  LucideIcon,
+  Printer,
+  Redo2Icon,
+  SpellCheck2Icon,
+  Undo2Icon,
+  Underline,
+} from 'lucide-react';
 
 interface ToolbarButtonProps {
   onClick?: () => void;
@@ -28,7 +39,8 @@ const ToolbarButton = ({
 };
 
 export const Toolbar = () => {
-  // matrix of sections for toolbar
+  const { editor } = useEditorStore();
+  // matrix of sections for toolbar menu
   const sections: {
     label: string;
     icon: LucideIcon;
@@ -39,7 +51,49 @@ export const Toolbar = () => {
       {
         label: 'Undo',
         icon: Undo2Icon,
-        onClick: () => console.log('undo clicked'),
+        onClick: () => editor?.chain().focus().undo().run(),
+      },
+      {
+        label: 'Redo',
+        icon: Redo2Icon,
+        onClick: () => editor?.chain().focus().redo().run(),
+      },
+      {
+        label: 'Print',
+        icon: Printer,
+        onClick: () => window.print(),
+      },
+      {
+        label: 'Spell Check',
+        icon: SpellCheck2Icon,
+        onClick: () => {
+          const current = editor?.view.dom.getAttribute('spellcheck');
+          editor?.view.dom.setAttribute(
+            'spellcheck',
+            current === 'false' ? 'true' : 'false'
+          );
+        },
+      },
+    ],
+    // next section for tool bar menu
+    [
+      {
+        label: 'Bold',
+        icon: BoldIcon,
+        isActive: editor?.isActive('bold'),
+        onClick: () => editor?.chain().focus().toggleBold().run(),
+      },
+      {
+        label: 'Italic',
+        icon: ItalicIcon,
+        isActive: editor?.isActive('italic'),
+        onClick: () => editor?.chain().focus().toggleItalic().run(),
+      },
+      {
+        label: 'Underline',
+        icon: Underline,
+        isActive: editor?.isActive('underline'),
+        onClick: () => editor?.chain().focus().toggleUnderline().run(),
       },
     ],
   ];
@@ -47,6 +101,14 @@ export const Toolbar = () => {
   return (
     <div className="bg-[#f1f4f9] px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto">
       {sections[0].map((item) => (
+        <ToolbarButton key={item.label} {...item} />
+      ))}
+      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      {/**TODO font family padding and font size  */}
+      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      {sections[1].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
     </div>

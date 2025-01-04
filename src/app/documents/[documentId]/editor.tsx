@@ -10,10 +10,38 @@ import TableRow from '@tiptap/extension-table-row';
 import Image from '@tiptap/extension-image';
 import Table from '@tiptap/extension-table';
 import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import { useEditorStore } from '@/store/use-editor-store';
 
 export const Editor = () => {
+  const { setEditor } = useEditorStore();
   // editor config
   const editor = useEditor({
+    // to make sure the toolbar is up to date with the current content
+    onCreate({ editor }) {
+      setEditor(editor);
+    },
+    onDestroy() {
+      setEditor(null);
+    },
+    onUpdate({ editor }) {
+      setEditor(editor);
+    },
+    onTransaction({ editor }) {
+      setEditor(editor);
+    },
+    onFocus({ editor }) {
+      setEditor(editor);
+    },
+
+    onBlur({ editor }) {
+      setEditor(editor);
+    },
+
+    onContentError({ editor }) {
+      setEditor(editor);
+    },
+
     editorProps: {
       attributes: {
         style: 'padding-left: 56px; padding-right:56px',
@@ -31,6 +59,7 @@ export const Editor = () => {
       TableHeader,
       Image,
       ImageResize,
+      Underline,
     ],
     content: `<table>
           <tbody>
