@@ -11,6 +11,11 @@ import Image from '@tiptap/extension-image';
 import Table from '@tiptap/extension-table';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
+import FontFamily from '@tiptap/extension-font-family';
+import Link from '@tiptap/extension-link';
+import TextStyle from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import Highlight from '@tiptap/extension-highlight';
 import { useEditorStore } from '@/store/use-editor-store';
 
 export const Editor = () => {
@@ -60,6 +65,17 @@ export const Editor = () => {
       Image,
       ImageResize,
       Underline,
+      FontFamily,
+      TextStyle,
+      Color,
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        defaultProtocol: 'https',
+      }),
+      Highlight.configure({
+        multicolor: true,
+      }),
     ],
     content: `<table>
           <tbody>
